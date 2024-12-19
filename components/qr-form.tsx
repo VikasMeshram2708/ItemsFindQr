@@ -1,77 +1,94 @@
-"use client"
-import React, { useState, useCallback } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import QRCode from 'react-qr-code';
+"use client";
+import React, { useState, useCallback } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import QRCode from "react-qr-code";
 
 // Zod schema for form validation
-const UserDataSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
-  age: z.string().regex(/^\d+$/, { message: 'Age must be a number' }),
-  phone: z.string().regex(/^\+?[\d\s()-]{10,15}$/, { message: 'Invalid phone number' }),
-  permLocation: z.string().min(3, { message: 'Location must be at least 3 characters' }),
-  currentLocation: z.string().min(3, { message: 'Location must be at least 3 characters' })
+const qrSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
+  age: z.string().regex(/^\d+$/, { message: "Age must be a number" }),
+  phone: z
+    .string()
+    .regex(/^\+?[\d\s()-]{10,15}$/, { message: "Invalid phone number" }),
+  permLocation: z
+    .string()
+    .min(3, { message: "Location must be at least 3 characters" }),
+  currentLocation: z
+    .string()
+    .min(3, { message: "Location must be at least 3 characters" }),
 });
 
-type UserData = z.infer<typeof UserDataSchema>;
+type UserData = z.infer<typeof qrSchema>;
 
 const QrForm: React.FC = () => {
   // State to control QR code visibility
   const [showQrCode, setShowQrCode] = useState(false);
   const [submittedData, setSubmittedData] = useState<UserData | null>(null);
 
-  const { 
-    control, 
-    handleSubmit, 
-    reset, 
-    formState: { errors } 
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
   } = useForm<UserData>({
-    resolver: zodResolver(UserDataSchema),
+    resolver: zodResolver(qrSchema),
     defaultValues: {
-      name: '',
-      age: '',
-      phone: '',
-      permLocation: '',
-      currentLocation: ''
-    }
+      name: "",
+      age: "",
+      phone: "",
+      permLocation: "",
+      currentLocation: "",
+    },
   });
 
   // Optimized submit handler with proper error handling
-  const onSubmit = useCallback((data: UserData) => {
-    try {
-      console.log('Validated Form Data:', data);
-      // Store submitted data and show QR code
-      setSubmittedData(data);
-      setShowQrCode(true);
-      
-      // Reset the form
-      reset();
-    } catch (error) {
-      console.error('Submission Error:', error);
-      // Implement proper error toast/notification
-    }
-  }, [reset]);
+  const onSubmit = useCallback(
+    (data: UserData) => {
+      try {
+        console.log("Validated Form Data:", data);
+        // Store submitted data and show QR code
+        setSubmittedData(data);
+        setShowQrCode(true);
+
+        // Reset the form
+        reset();
+      } catch (error) {
+        console.error("Submission Error:", error);
+        // Implement proper error toast/notification
+      }
+    },
+    [reset]
+  );
 
   return (
     <div className="container mx-auto p-4">
       <Card className="w-full max-w-xl mx-auto shadow-lg">
         <CardHeader>
           <CardTitle className="text-center text-xl font-semibold">
-            User Registration
+            Generate QR Code
           </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {[
-              { name: 'name', label: 'Full Name', type: 'text' },
-              { name: 'age', label: 'Age', type: 'text' },
-              { name: 'phone', label: 'Phone Number', type: 'tel' },
-              { name: 'permLocation', label: 'Permanent Location', type: 'text' },
-              { name: 'currentLocation', label: 'Current Location', type: 'text' }
+              { name: "name", label: "Full Name", type: "text" },
+              { name: "age", label: "Age", type: "text" },
+              { name: "phone", label: "Phone Number", type: "tel" },
+              {
+                name: "permLocation",
+                label: "Permanent Location",
+                type: "text",
+              },
+              {
+                name: "currentLocation",
+                label: "Current Location",
+                type: "text",
+              },
             ].map(({ name, label, type }) => (
               <div key={name} className="space-y-1">
                 <Controller
@@ -83,7 +100,9 @@ const QrForm: React.FC = () => {
                         {...field}
                         type={type}
                         placeholder={`Enter Your ${label}`}
-                        className={`${errors[name as keyof UserData] ? 'border-red-500' : ''}`}
+                        className={`${
+                          errors[name as keyof UserData] ? "border-red-500" : ""
+                        }`}
                       />
                       {errors[name as keyof UserData] && (
                         <p className="text-red-500 text-xs mt-1">
@@ -95,11 +114,7 @@ const QrForm: React.FC = () => {
                 />
               </div>
             ))}
-            <Button 
-              type="submit" 
-              variant="secondary" 
-              className="w-full"
-            >
+            <Button type="submit" className="w-full">
               Generate QR Code
             </Button>
           </form>

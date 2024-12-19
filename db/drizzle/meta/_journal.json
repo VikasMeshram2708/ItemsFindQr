@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1734535816386,
+      "tag": "0000_complex_sunfire",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1734591651901,
+      "tag": "0001_illegal_kingpin",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1734592742419,
+      "tag": "0002_old_shadow_king",
+      "breakpoints": true
+    }
+  ]
+}
