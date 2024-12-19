@@ -81,4 +81,8 @@ module.exports = {
       },
     },
   ],
+  rules: {
+    "jsx-a11y/no-noninteractive-tabindex": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+  },
 };
