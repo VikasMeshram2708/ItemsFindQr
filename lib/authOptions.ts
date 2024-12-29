@@ -2,10 +2,8 @@
 import GoogleProvider from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { db } from "../db";
-import { eq } from "drizzle-orm";
-import { users } from "../db/schema";
 import { NextAuthOptions, User } from "next-auth";
+import { prismaInstance } from "@/db";
 
 // console.log("env", {
 //   auth_secret: process.env.NEXTAUTH_SECRET,
@@ -34,11 +32,14 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials): Promise<User | null> {
         if (!credentials) return null;
+        console.log("creds", credentials);
         const { email, password } = credentials;
         console.log("auth", { email, password });
-        const existingUser = await db.query.users.findFirst({
-          where: eq(users.email, String(email)),
-          columns: {
+        const existingUser = await prismaInstance.user.findUnique({
+          where: {
+            email: email,
+          },
+          select: {
             id: true,
             email: true,
             password: true,
@@ -72,6 +73,25 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    // async signIn({ user }) {
+    //   console.log("sin-user", user);
+    //   // existing user
+    //   const userExist = await prismaInstance.user.findUnique({
+    //     where: {
+    //       email: String(user?.email),
+    //     },
+    //   });
+
+    //   if (!userExist) {
+    //     await prismaInstance.user.create({
+    //       data: {
+    //         name: String(user?.name),
+    //         email: String(user?.email),
+    //       },
+    //     });
+    //   }
+    //   return true;
+    // },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;

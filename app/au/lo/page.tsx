@@ -56,7 +56,6 @@ export default function LoginPage() {
                     email: e.target.value,
                   })
                 }
-                required
               />
               {/* {state?.error?.email && (
                 <span className="text-sm text-red-500 font-bold">
@@ -77,7 +76,6 @@ export default function LoginPage() {
                     password: e.target.value,
                   })
                 }
-                required
               />
               {/* {state?.error?.password && (
                 <span className="text-sm text-red-500 font-bold">

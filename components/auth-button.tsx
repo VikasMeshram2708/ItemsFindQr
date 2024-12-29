@@ -11,7 +11,7 @@ export default function AuthButton() {
       onClick={() => signIn("google")}
       variant={"outline"}
       className="shadow-lg w-full"
-      type="submit"
+      type="button"
     >
       <Image src="/google.svg" alt="google oauth" width={25} height={25} />
       Sign In with Google
