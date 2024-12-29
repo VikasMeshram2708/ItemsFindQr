@@ -1,12 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import { Button, buttonVariants } from "./ui/button";
-import { auth, signOut } from "@/auth";
 import { LogOut } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 
-export default async function Navbar() {
-  const session = await auth();
+export default function Navbar() {
+  const { status } = useSession();
 
-  if (!session?.user) {
+  if (status === "unauthenticated") {
     return (
       <header className="border-b shadow-lg">
         <nav className="container mx-auto flex items-center justify-between p-3">
@@ -30,19 +32,21 @@ export default async function Navbar() {
         <Link className="chead font-bold" href="/">
           Qr-ItemsFind
         </Link>
-        <form
-          action={async () => {
-            "use server";
-            await signOut();
-          }}
-        >
-          <Button type="submit" variant={"destructive"}>
+
+        {status === "loading" ? (
+          <span className="text-sm">processing...</span>
+        ) : (
+          <Button
+            onClick={() => signOut()}
+            type="submit"
+            variant={"destructive"}
+          >
             <span>
               <LogOut />
             </span>
             <span>Logout</span>
           </Button>
-        </form>
+        )}
       </nav>
     </header>
   );
