@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
-        console.log("existingUser", existingUser);
+        // console.log("existingUser", existingUser);
 
         if (!existingUser) {
           throw new Error("User Doesn't Exist");

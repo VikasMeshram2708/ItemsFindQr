@@ -1,3 +1,7 @@
+"use client";
+
+import { signup } from "@/app/actions/actions";
+import AuthButton from "@/components/auth-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,38 +12,72 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Image from "next/image";
+import { toast } from "@/hooks/use-toast";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useActionState, useEffect } from "react";
 
 export default function SignUpPage() {
+  const [state, formAction, isPending] = useActionState(signup, null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state?.success) {
+      toast({
+        title: "Success",
+        description: "User Registered",
+      });
+      router.push("/au/lo");
+    } else if (state?.error) {
+      toast({
+        title: "Error",
+        description: state?.error,
+        variant: "destructive",
+      });
+    }
+  }, [state, router]);
   return (
     <div className="w-full h-screen flex items-center justify-center">
       <Card className="w-full max-w-lg mx-auto shadow-lg">
         <CardHeader>
-          <CardTitle className="text-center">Sign Up</CardTitle>
+          <CardTitle className="text-center">
+            {isPending ? "Processing..." : "Sign Up"}
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <form className="grid gap-3" action="">
+          <form className="grid gap-3" action={formAction}>
             <Label htmlFor="name">
-              <Input placeholder="Type Name" />
+              <Input name="name" type="text" placeholder="Type Name" />
+              {state?.fieldErrors?.name && (
+                <span className="text-sm text-red-500">
+                  {state?.fieldErrors?.name}
+                </span>
+              )}
             </Label>
             <Label htmlFor="email">
-              <Input placeholder="Type Email" />
+              <Input name="email" type="email" placeholder="Type Email" />
+              {state?.fieldErrors?.email && (
+                <span className="text-sm text-red-500">
+                  {state?.fieldErrors?.email}
+                </span>
+              )}
             </Label>
             <Label htmlFor="email">
-              <Input placeholder="Type Password" />
-            </Label>
-            <Button type="submit">Sign Up</Button>
-            <Button variant={"outline"} className="shadow-lg" type="submit">
-              <Image
-                src="/google.svg"
-                alt="google oauth"
-                width={25}
-                height={25}
+              <Input
+                name="password"
+                type="password"
+                placeholder="Type Password"
               />
-              Sign In with Google
+              {state?.fieldErrors?.password && (
+                <span className="text-sm text-red-500">
+                  {state?.fieldErrors?.password}
+                </span>
+              )}
+            </Label>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Processing..." : "Sign Up"}
             </Button>
+            <AuthButton />
           </form>
         </CardContent>
         <CardFooter className="flex items-center justify-center">

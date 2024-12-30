@@ -1,12 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { Button, buttonVariants } from "./ui/button";
+import { buttonVariants } from "./ui/button";
 import { LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Navbar() {
-  const { status } = useSession();
+  const { status, data } = useSession();
 
   if (status === "unauthenticated") {
     return (
@@ -36,16 +45,34 @@ export default function Navbar() {
         {status === "loading" ? (
           <span className="text-sm">processing...</span>
         ) : (
-          <Button
-            onClick={() => signOut()}
-            type="submit"
-            variant={"destructive"}
-          >
-            <span>
-              <LogOut />
-            </span>
-            <span>Logout</span>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar>
+                <AvatarImage
+                  src={data?.user?.image || "https://github.com/shadcn.png"}
+                  alt={String(data?.user?.name)}
+                />
+                <AvatarFallback>{data?.user?.name?.charAt(0)}</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link
+                  className="cursor-pointer"
+                  href={`/user/${data?.user?.id}`}
+                >
+                  Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <LogOut />
+                <p onClick={() => signOut()}>Logout</p>
+              </DropdownMenuItem>
+              <DropdownMenuItem>Subscription</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </nav>
     </header>
