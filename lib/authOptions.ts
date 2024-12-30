@@ -32,9 +32,9 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials): Promise<User | null> {
         if (!credentials) return null;
-        console.log("creds", credentials);
+        // console.log("creds", credentials);
         const { email, password } = credentials;
-        console.log("auth", { email, password });
+        // console.log("auth", { email, password });
         const existingUser = await prismaInstance.user.findUnique({
           where: {
             email: email,

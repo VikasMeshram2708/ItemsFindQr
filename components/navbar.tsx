@@ -68,9 +68,9 @@ export default function Navbar() {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <LogOut />
-                <p onClick={() => signOut()}>Logout</p>
+                <p className="cursor-pointer" onClick={() => signOut()}>Logout</p>
               </DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">Subscription</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         )}
