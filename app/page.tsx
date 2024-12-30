@@ -28,7 +28,7 @@ export default function Home() {
                 href="/user"
                 className={buttonVariants({ variant: "default" })}
               >
-                Update Your Profile
+                Get Your QR Now
               </Link>
             </p>
           </CardContent>

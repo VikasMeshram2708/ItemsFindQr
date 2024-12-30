@@ -7,12 +7,12 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
 
-  console.log("ses", session);
+  // console.log("ses", session);
 
   const publicRoutes = new Set(["/au/lo", "/au/sn", "/user/:path"]);
 
   const path = request.nextUrl.pathname;
-  console.log("current-pat", path);
+  // console.log("current-pat", path);
 
   const isPublicRoute = publicRoutes.has(path);
 
@@ -27,5 +27,5 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 export const config = {
-  matcher: ["/user"],
+  matcher: ["/user", "/qr"],
 };
