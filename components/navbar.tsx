@@ -36,7 +36,7 @@ export default function Navbar() {
   }
 
   return (
-    <header className="border-b shadow-lg">
+    <header className="border-b-2 shadow-lg">
       <nav className="flex container mx-auto items-center justify-between p-3">
         <Link className="chead font-bold" href="/">
           Qr-ItemsFind
@@ -66,11 +66,15 @@ export default function Navbar() {
                   Profile
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <Link href="/qr">Generate Qr</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <LogOut />
-                <p className="cursor-pointer" onClick={() => signOut()}>Logout</p>
+                <p className="cursor-pointer" onClick={() => signOut()}>
+                  Logout
+                </p>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">Subscription</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         )}

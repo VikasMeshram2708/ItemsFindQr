@@ -12,7 +12,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen h-screen py-20">
       <div className="container mx-auto">
         <Card className="shadow-lg">
           <CardHeader>
